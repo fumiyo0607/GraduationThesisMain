@@ -1,0 +1,168 @@
+\chapter{関連研究}
+
+本章では，推薦システムの概要を述べると共に，近年の研究動向，および代表的な手法の概要について説明する．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{推薦システムの概要}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{sec:Rec_intro}
+
+推薦システムとは，データからユーザの嗜好の合致したアイテムなどを選び出し，ユーザに提示するシステムであり，大きく以下の２つに大別される．
+
+
+
+
+\newpage
+SemiBoostはデータ間の類似度を利用し，ラベルなしデータに仮ラベルを付与することで分類器を学習する．ここで作成した分類器を用いて分類を行い，分類により付与された仮ラベルと他のデータとの類似度を測ることで正しく分類できているか評価する．\par
+その後，付与されたラベルが誤っている可能性の高いデータが正しく分類されるように，誤分類している可能性の高いラベルなしデータを抽出してそのデータに着目した弱分類器を構築する．弱分類器を以前の分類器に重みをかけて付加することで新たな分類器を構築する操作を繰り返す．\par
+
+このように新たな分類器を逐次的に構築し，構築されたすべての分類器の結果をアンサンブルすることにより分類器を構築する．半教師あり学習で用いる少数のラベルありデータは，何らかの行動の結果として得られているデータであり，実際のデータ分布に従ったランダムサンプリングではない場合があるが，SemiBoostは二つのデータの分布が明瞭に分かれているときに，少数のラベルありデータによる半教師あり学習の効果が大きい傾向が見られる．データの分布が同一カテゴリ内でも複数に分かれているときは，精度の改善が得られにくいことが問題として挙げられる．
+%\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{SemiBoostアルゴリズム}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{sec:SemiBoost}
+以下にSemiBoostのアルゴリズムを示す．
+
+
+\begin{description}
+  \item[Step1)] 全学習データ間の類似度を式(3.4)によるガウスカーネルを用いて求める．
+
+  \item[Step2)] アンサンブル分類器$H(\bm{x})$を初期化し，$t = 1$とする．
+
+  \item[Step3)] 全てのラベルなしデータ$\bm{x}_i^U$の仮ラベル$y_i^U$を式(\ref{eq:eq6})を用いて予測する．
+
+  \item[Step4)] 誤分類されている可能性の高いラベルなしデータ$\bm{x}_i^U$を式(3.9)により学習に用いるデータとして選択する．
+
+  \item[Step5)] Step4で選んだラベルなしデータ$\bm{x}_i^U$を用いて弱分類器$h_t$を学習し，分類誤差$\varepsilon_t$を用いて分類器の重みを決定する．
+ここで$h_{t,i}$はラベルなしデータ$\bm{x}_i^U$を入力としたときの弱分類器$h_t$による二値分類結果である．
+%\begin{equation}
+\begin{eqnarray}
+%\label{eq:eq8}
+ %\hspace{30pt}
+ \alpha_t &=& \frac{1}{4}\ln\left({\frac{1-\varepsilon_t}{\varepsilon_t}}\right)\\
+%\end{equation}\par
+%\begin{equation}
+%\label{eq:eq9}
+ %\hspace{-10pt}
+\varepsilon_t &=& \frac{\sum_{i=1}^{N_U}p_i\delta(h_{t,i} ,-1)+\sum_{i=1}^{N_U}q_i\delta(h_{t,i} ,1)}{\sum_{i}(p_i+q_i)}
+%\end{equation}\par
+\end{eqnarray}
+
+  \item[Step6)] Step5で学習した弱分類器$h_t$を$\alpha_t$で重みづけし，アンサンブル分類器$H(\bm{x})$に結合し更新する．
+\begin{equation}
+\label{eq:eq10}
+ \hspace{20pt}H(\bm{x})\leftarrow H(\bm{x})+\alpha_t h_t(\bm{x})
+\end{equation}\par
+
+  \item[Step7)] $t \leftarrow t+1$とし，Step4へ．$t = T$のとき終了．
+
+\end{description}\par
+\vspace{2.0cm}
+
+
+Step1で用いるガウスカーネル\cite{kernel}は式(\ref{eq:eq4})で表される．$s_{ij}$は$\bm{x}_i$と$\bm{x}_j$の類似度であり，$\bm{x}_i,\bm{x}_j$は全データのうち2つの任意の点とする．
+ただし，$\|\cdot \|_2^2$は$\ell_2$ノルムの2乗を表し，$\sigma$は定数とする．
+\begin{equation}
+\label{eq:eq4}
+ \hspace{30pt} s_{ij} = \exp\left(-\frac{\|\bm{x}_i -\bm{x}_j \|_2^2}{\sigma^2}\right)
+\end{equation}\par
+%この$s_{ij}$をまとめた全データ間の類似度行列を作成する．
+%ラベルありデータとラベルなしデータの類似度を$s_{ij}^{UL}$，ラベルなしデータ同士の類似度を$s_{ij}^{UU}$として以降のステップで用いる．
+\par
+
+
+Step2のアンサンブル分類器$H(\bm{x})$は，全ての弱分類器の出力結果をアンサンブルした結果を出力する分類器である．このアンサンブル分類器に弱分類器を付加して分類器を構築する．式(\ref{eq:eq24})によってアンサンブル分類器を初期化する．
+\begin{equation}
+\label{eq:eq24}
+ \hspace{30pt} H(\bm{x}) = 0
+\end{equation}\par
+$H(\bm{x}) = 0$とは，入力値をそのまま返す状態である．例えば，初期状態のラベルが$1$であれば，そのまま$1$を出力する状態である．\par
+
+\newpage
+Step3において，ラベルなしデータ$\bm{x}_i^U$がカテゴリ$+1$に所属する可能性が高いときに大きな値をとる$p_i$と，カテゴリ$-1$に所属する可能性が高いときに大きな値をとる$q_i$を用いて，ラベルなしデータがどちらのラベルに所属するかを式(\ref{eq:eq6})により推定する．$p_i, q_i$の式は，前項でラベルありデータとの類似度の評価，後項で他のラベルなしデータとの類似度の評価を行うことで，ラベルなしデータ$\bm{x}_i$が誤分類されていないかの評価を行っている．
+\begin{eqnarray}
+\label{eq:eq6}
+ \hspace{40pt} y_i^U = \rm{sign}\it{(p_i - q_i)}
+\end{eqnarray}\par
+ただし，$\rm{sign}(\it a)$は，$a \geq 0$のとき$+1$，$a < 0$のとき$-1$をとる関数である．\par
+
+また，このとき用いる$p_i, q_i$は式(\ref{eq:eq2}),(\ref{eq:eq3})により求める．
+\begin{equation}
+\label{eq:eq2}
+ \hspace{-12pt} p_i =\sum_{j=1}^{N_L} s_{ij}^{UL} e^{-2H_i} \delta(y_j^L ,1) +\frac{\gamma}{2} \sum_{j=1}^{N_U} s_{ij}^{UU} e^{H_j-H_i}
+\end{equation}\par
+\begin{equation}
+\label{eq:eq3}
+ \hspace{-12pt} q_i =\sum_{j=1}^{N_L} s_{ij}^{UL} e^{2H_i} \delta(y_j^L ,-1) +\frac{\gamma}{2} \sum_{j=1}^{N_U} s_{ij}^{UU} e^{H_i-H_j}
+\end{equation}\par
+$\delta(a,b)$は$a = b$のとき$+1$，それ以外は$0$となるインジケータ関数であり，$\gamma  (> 0)$は定数である．$s_{ij}^{UL} (\geq 0)$はラベルなしデータ$\bm{x}_i^U$とラベルありデータ$\bm{x}_j^L$の類似度，$s_{ij}^{UU}(\geq 0)$はラベルなしデータ$\bm{x}_i^U$と他のラベルなしデータ$\bm{x}_j^U$の類似度とする．$H_i$は，アンサンブル分類器に$\bm{x}_i^U$を入力したときの出力値である．\par
+%仮ラベルを付与して
+
+Step4において，ラベルなしデータ$\bm{x}_i^U$の中から弱分類器の学習に用いるデータを式(3.9)の確率に従い選択する．
+ここで，$P(\bm{x}_i^U)$はラベルなしデータ$\bm{x}_i^U$が学習に用いられる確率である．
+\begin{equation}
+\label{eq:eq7}
+ \hspace{20pt} P(\bm{x}_i^U) = \frac{|p_i-q_i|}{\sum_{i=1}^{n_U}|p_i-q_i|}
+\end{equation}\par
+また，学習に用いるデータの数は任意に決定することができるが，経験的にラベルなしデータのうち$10\%$程度が好ましいことが知られている．
+
+\vspace{1.0cm}
+
+Step5において，Step4で選択したラベルなしデータとラベルありデータを用いて弱分類器の学習を行う．このとき，弱分類器として決定木やSVMなどの二値分類器などが用いられる．また，この弱分類器の重みは誤分類したものに大きな重みを付与するBoostingの考え方を用いて導出されている．
+
+
+\vspace{1.0cm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{flushleft}
+%\large{\bfseries {(3) トレンド関数}}
+%\end{flushleft}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+SemiBoostのイメージを図\ref{semi2}，図\ref{semi3}に示す．
+\vspace{1.0cm}
+\begin{figure}[H]
+\centering
+\includegraphics[width=12.0cm]{semiboost1.png}
+\caption{アンサンブル分類器の更新前}
+\label{semi2}
+\end{figure}
+\vspace{1.0cm}
+\begin{figure}[H]
+\centering
+\includegraphics[width=12.0cm]{semiboost2.png}
+\caption{アンサンブル分類器の更新後}
+\label{semi3}
+\end{figure}
+
+
+
+
+\newpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{SemiBoostの課題}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\label{sec:SemiBoost_prob}
+SemiBoostは，データの類似度をもとにした半教師あり学習の手法であるため分類精度の高い手法であるが，以下の問題点が挙げられる．\par
+\vspace{3.0mm}
+\begin{description}
+\item[問題点]\mbox{}\\
+\end{description}
+\vspace{-10.0mm}
+
+\begin{itemize}
+\item 一般的な分類問題は多値分類問題の場合が多いが，この手法は二値分類問題を想定した問題なので多値分類問題に直接適用することができない．\par
+\item データの分布が複雑なときは仮ラベルの付与が難しくなり，良いアンサンブル分類器の構築が難しい．\par
+\item データの類似度を用いて学習を行うため，学習時間が必要．
+
+\end{itemize}
+
+本研究では，この問題のうち上二つの問題を解決することを目的としている．
+
+
+
+
+
+
+
+
+

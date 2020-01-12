@@ -1,0 +1,177 @@
+\documentclass[a4j,12pt,openany]{jreport}
+
+\usepackage{amsmath,amssymb,epsbox}
+\usepackage{hhline}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{ascmac}
+\usepackage{listings}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{here}
+\usepackage{multicol}
+\usepackage{lscape}
+\usepackage{remreset}
+\usepackage{setspace}
+\usepackage{comment}
+\usepackage{plext}
+\usepackage{booktabs}
+\usepackage{multirow}
+% \usepackage{listings, jlisting}
+\usepackage{color}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{slashbox}
+%\usepackage {diagbox}
+
+
+\makeatletter
+\def\Hline{%
+\noalign{\ifnum0=`}\fi\hrule \@height 2pt \futurelet
+\reserved@a\@xhline}
+\makeatother
+
+
+
+
+\lstset{
+  breaklines = true,
+  language=Python,
+  basicstyle=\ttfamily\scriptsize,
+  commentstyle={\itshape \color[cmyk]{1,0.4,1,0}},
+  classoffset=1,
+  keywordstyle={\bfseries \color[cmyk]{0,1,0,0}},
+  stringstyle={\ttfamily \color[rgb]{0,0,1}},
+  frame=tRBl,
+  framesep=5pt,
+  showstringspaces=false,
+  numbers=left,
+  stepnumber=1,
+  numberstyle=\tiny,
+  tabsize=2,
+}
+
+%%%%%%%%%%%%%%%%%%%%%%図を通し番号にする%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%このWebサイトを見てやってみた→　http://rexpit.blog29.fc2.com/blog-entry-99.html
+\usepackage{remreset} 
+\makeatletter
+%	\@removefromreset{figure}{chapter}
+%	\def\thefigure{\arabic{figure}}
+
+	\@removefromreset{table}{chapter}
+	\def\thetable{\arabic{table}}
+
+%	\@removefromreset{equation}{chapter}
+%	\def\theequation{\arabic{equation}}
+
+	\newenvironment{tablehere}
+  {\def\@captype{table}}
+  {}
+\newenvironment{figurehere}
+    {\def\@captype{figure}}
+    {}
+
+	%\@removefromreset{subfigure}{chapter}
+	%\def\thesubfigure{(\alph{subfigure})}
+	%\def\p@subfigure{\arabic{figure}}
+	%\@removefromreset{subtable}{chapter}
+	%\def\thesubtable{(\alph{subtable})}
+	%\def\p@subtable{\arabic{table}}
+	%最新の TeX では \subfigure, \subtable は廃止されている。(代替コマンド: \subcaption)
+%\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\usepackage{ascmac}
+%\usepackage{mypaper}
+
+%\input{preamble}
+
+
+\pagestyle{headings}
+% \setlength{\topmargin}{1.6cm}
+% \setlength{\oddsidemargin}{1.65cm}
+% \setlength{\textheight}{20cm}
+% \setlength{\textwidth}{32zw} %style
+\renewcommand{\baselinestretch}{1.3}
+\newlength{\gralen}
+
+%%%%%%%%%%%%%%%%%%%%%%%%丸で囲んだ文字%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\def\MARU#1{raisebox{.2ex}[0pt]{\leavevmode\setbox0\hbox{$\bigcirc$}%
+%\copy0\kerm-\wd0\hbox to\wd0{\hfil{\scriptsize#1}\hfil}}}
+\def\MARU#1{{\ooalign{\hfil#1\/\hfil\crcr\raise.167ex\hbox{\mathhexbox20D}}}}%
+
+%%%%% Theorem environment 定理環境 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newtheorem{ex}{例}[section]
+%\newtheorem{df}{定義}[section]
+\newtheorem{theo}{定理}[section]
+%\newtheorem{lem}{補題}[section]
+%\newtheorem{kei}{系}[section]
+%\newenvironment{prove}{\par\hspace*{-1.5zw}\begingroup（{\bf 証明}）}{\par\vspace{1zw}\endgroup}
+\newcommand{\vect}[1]{\mbox{\normalsize\boldmath{$#1$}}}
+
+%%%%% boldmath macro %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\BM#1{{\mbox{\boldmath $#1$}}}
+\def\bm#1{{\mbox{\footnotesize \boldmath $#1$}}}
+\newcommand{\seq}[1]{\mbox{\boldmath $#1 $}}
+
+%%%%% □ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\jot}{8pt}
+\def\QED{\hfill$\square$}
+
+%%%%% ↑ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\UpArrow}{\mbox{\kern-.2em$\uparrow$\kern-.05em}}
+
+%%%%% MP DP DMP %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\MP}{M\kern-0.17emP}
+\newcommand{\DP}{D\kern-0.17emP}
+\newcommand{\DMP}{D\kern-0.17emM\kern-0.17emP}
+\newcommand{\argmax}{\mathop{\rm argmax}\limits}
+\newcommand{\argmin}{\mathop{\rm argmin}\limits} 
+
+%%%%% footnote 脚注 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\makeatletter
+\footnotesep0pt
+\def\@fnsymbol#1{\ifcase#1\or \dagger\or%  %ダガー指定
+    \dagger\kern-2pt\dagger\or 
+    \dagger\kern-2pt\dagger\kern-2pt\dagger\or
+    \dagger\kern-2pt\dagger\kern-2pt\dagger\kern-2pt\dagger\else
+    \dagger\kern-2pt\dagger\kern-2pt\dagger\kern-2pt\dagger\kern-2pt\dagger\fi\relax}
+\def\@makefnmark{\nolinebreak\hbox{$^{\scriptscriptstyle\@thefnmark}$}}
+\def\footnoterule{\kern-5\p@ \hrule width 37mm height0.1pt \kern 4\p@} %\kern 2.6\p@}
+\def\thefootnote{\fnsymbol{footnote}}
+% Page-Dependent Footnotes by S. Fujita 1995/06/06
+\newcount\@fn@total \@fn@total\z@ \newcount\CurrP@ge \CurrP@ge\z@
+\def\ftnt@page#1#2{\@tempcnta=#2 \ifnum\@tempcnta>\CurrP@ge
+\expandafter\gdef\csname @ftnt@#1\endcsname{#2}\CurrP@ge=\@tempcnta\fi}
+\def\Footnote#1{\global\advance\@fn@total\@ne
+  \@ifundefined{@ftnt@\the\@fn@total}{\footnote{#1}}
+  {\c@footnote\z@ \footnote{#1}}\edef\the@fn@total{\the\@fn@total}%
+   {\let\the\z@\edef\next{\write\@auxout{\string\ftnt@page
+   {\the@fn@total}{\the\c@page}}}\next}}
+\long\def\@makefntext#1{\parindent 1zw\noindent%
+  \hbox to 2zw{\hss$^{\@thefnmark}$~}%
+  \@tempdima\columnwidth\advance\@tempdima-2zw\parbox[t]{\@tempdima}{#1}}
+\makeatother
+
+\renewcommand{\bibname}{参考文献}
+
+
+
+%%%%% 本文 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\input{01-Title}
+\input{02-Abstract}
+\input{03-Introduction} % 概要
+\input{04-Chapter2}
+\input{05-Chapter3} 
+\input{06-Chapter4} % 提案モデル
+\input{07-Chapter5} % 実験
+\input{08-Chapter6} % 全体考察
+\input{09-Chapter7} % まとめと今後の課題
+\input{11-Thanks}
+\input{99-ref}
+
+%\input{100-Appendix}
+
+
+\end{document}

@@ -1,0 +1,75 @@
+\appendix
+% \chapter*{付録}
+% \addcontentsline{toc}{chapter}{付録}
+% \markright{付録}
+% \renewcommand{\baselinestretch}{0.8}
+
+\chapter{潜在クラス数の決定}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{菓子カテゴリの潜在クラス数決定}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+GMMによる潜在クラス数の決定には，赤池情報量規準(AIC) \cite{AIC} を用いる．潜在クラス数を変化させてGMMを行い，AICを求める．AICが収束した時の値を潜在クラス数とした．\par
+以下に，菓子カテゴリの周期成分とイベント成分の潜在クラス数を変化させたときのAIC値の推移を示す．周期成分とイベント成分のAICはそれぞれ以下の式(\ref{eq:AIC_eq1})(\ref{eq:AIC_eq2})で表される．
+
+\begin{eqnarray}
+\label{eq:AIC_eq1}
+ AIC = - 2 ln\frac{\pi_{j} \mathcal{N}({\bm x}_n|{\bm \mu}_{j},{\bm \Omega}_{j})}{\sum^{J}_{j=1}\pi_{j} \mathcal{N}({\bm x}_n|{\bm \mu}_{j},{\bm \Omega}_{j})} + 54,446
+\end{eqnarray}
+
+\begin{eqnarray}
+\label{eq:AIC_eq2}
+ AIC = - 2 ln\frac{\pi_{l} \mathcal{N}({\bm x}_n|{\bm \nu}_{l},{\bm \Gamma}_{l})}{\sum^{L}_{l=1}\pi_{l} \mathcal{N}({\bm x}_n|{\bm \nu}_{l},{\bm \Gamma}_{l})} + 54,446
+\end{eqnarray}
+
+\begin{center}
+\begin{figurehere}
+\includegraphics[scale=0.8]{aic_kashi_week_s.png}
+\caption{菓子カテゴリ(周期成分)のAIC値の推移}
+\label{fig: aic_kashi_week}
+\end{figurehere}
+\end{center}
+\begin{center}
+\begin{figurehere}
+\includegraphics[scale=0.8]{aic_kashi_event_s.png}
+\caption{菓子カテゴリ(イベント成分)のAIC値の推移}
+\label{fig: aic_kashi_event}
+\end{figurehere}
+\end{center}\par
+
+\newpage
+
+図\ref{fig: aic_kashi_week}より，潜在クラス数が7のときからAIC値の減少が緩やかになっている．よって，周期成分の潜在クラス数は7とした．同様に，図\ref{fig: aic_kashi_event}より，潜在クラス数が7のときからAIC値の減少が緩やかになっている．よって，周期成分の潜在クラス数は7とした．
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{酒カテゴリの潜在クラス数決定}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+酒カテゴリも菓子カテゴリと同様に，潜在クラス数を変化させてGMMを行い，AICを求める．AICが収束した時の値を潜在クラス数とした．\par
+以下に，菓子カテゴリの周期成分とイベント成分の潜在クラス数を変化させたときのAIC値の推移を示す．周期成分とイベント成分のAICはそれぞれ以下の式(\ref{eq:AIC_eq3})(\ref{eq:AIC_eq4})で表される．
+
+\begin{eqnarray}
+\label{eq:AIC_eq3}
+ AIC = - 2 ln\frac{\pi_{j} \mathcal{N}({\bm x}_n|{\bm \mu}_{j},{\bm \Omega}_{j})}{\sum^{J}_{j=1}\pi_{j} \mathcal{N}({\bm x}_n|{\bm \mu}_{j},{\bm \Omega}_{j})} + 30,210
+\end{eqnarray}
+
+\begin{eqnarray}
+\label{eq:AIC_eq4}
+ AIC = - 2 ln\frac{\pi_{l} \mathcal{N}({\bm x}_n|{\bm \nu}_{l},{\bm \Gamma}_{l})}{\sum^{L}_{l=1}\pi_{l} \mathcal{N}({\bm x}_n|{\bm \nu}_{l},{\bm \Gamma}_{l})} + 42,294
+\end{eqnarray}
+
+\begin{center}
+\begin{figurehere}
+\includegraphics[scale=0.75]{aic_alcohol_week_s.png}
+\caption{酒カテゴリ(周期成分)のAIC値の推移}
+\label{fig: aic_alcohol_week}
+\end{figurehere}
+\end{center}
+\begin{center}
+\begin{figurehere}
+\includegraphics[scale=0.75]{aic_alcohol_event_s.png}
+\caption{酒カテゴリ(イベント成分)のAIC値の推移}
+\label{fig: aic_alcohol_event}
+\end{figurehere}
+\end{center}\par
+
+図\ref{fig: aic_alcohol_week}より，潜在クラス数が5のときからAIC値の減少が緩やかになっている．よって，周期成分の潜在クラス数は5とした．同様に，図\ref{fig: aic_alcohol_event}より，潜在クラス数が7のときからAIC値の減少が緩やかになっている．よって，周期成分の潜在クラス数は7とした．

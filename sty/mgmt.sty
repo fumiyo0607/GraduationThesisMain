@@ -1,0 +1,92 @@
+\setlength{\textheight}{\paperheight}
+\setlength{\textwidth}{\paperwidth} 
+\setlength{\topmargin}{-0.4truemm}
+\addtolength{\topmargin}{-\headheight}
+\addtolength{\topmargin}{-\headsep}
+\addtolength{\textheight}{-51truemm}
+
+\setlength{\oddsidemargin}{-5.4truemm}
+\setlength{\evensidemargin}{-5.4truemm} 
+\addtolength{\textwidth}{-40truemm}
+\setlength{\columnsep}{7mm}
+\renewcommand{\baselinestretch}{1}
+
+%section�w��
+\usepackage[tiny]{titlesec}
+\titleformat{\section}{\bf \fontsize{10pt}{0pt}}{\thesection.}{1zw}{}
+\titleformat{\subsection}{\bf \fontsize{10pt}{0pt}}{\thesubsection.}{1zw}{}
+\titleformat{\subsubsection}{\bf \normalsize}{\thesubsubsection.}{1zw}{}
+
+\titlespacing{\section}{0pt}{*0}{*0}
+\titlespacing{\subsection}{0pt}{*0}{*0}
+\titlespacing{\subsubsection}{0pt}{*0}{*0}
+%
+\pagestyle{empty}
+%
+%% JY1 it
+\DeclareFontShape{JY1}{mc}{m}{it}{<->ssub*mc/m/n}{}
+\DeclareFontShape{JY1}{mc}{bx}{it}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JY1}{gt}{m}{it}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JY1}{gt}{bx}{it}{<->ssub*gt/m/n}{}
+%%
+\DeclareFontShape{JY1}{mc}{b}{it}{<->ssub*mc/m/n}{}
+\DeclareFontShape{JY1}{mc}{eb}{it}{<->ssub*mc/m/n}{}
+\DeclareFontShape{JY1}{gt}{b}{it}{<->ssub*mc/m/n}{}
+\DeclareFontShape{JY1}{gt}{eb}{it}{<->ssub*mc/m/n}{}
+\DeclareFontShape{JY1}{gt}{ub}{it}{<->ssub*mc/m/n}{}
+%% JT1 it
+\DeclareFontShape{JT1}{mc}{m}{it}{<->ssub*mc/m/n}{}
+\DeclareFontShape{JT1}{mc}{bx}{it}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JT1}{gt}{m}{it}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JT1}{gt}{bx}{it}{<->ssub*gt/m/n}{}
+%%
+\DeclareFontShape{JT1}{mc}{b}{it}{<->ssub*mc/m/n}{}
+\DeclareFontShape{JT1}{mc}{eb}{it}{<->ssub*mc/m/n}{}
+\DeclareFontShape{JT1}{gt}{b}{it}{<->ssub*mc/m/n}{}
+\DeclareFontShape{JT1}{gt}{eb}{it}{<->ssub*mc/m/n}{}
+\DeclareFontShape{JT1}{gt}{ub}{it}{<->ssub*mc/m/n}{}
+%% sc
+\DeclareFontShape{JY1}{mc}{m}{sc}{<->ssub*mc/m/n}{}
+\DeclareFontShape{JT1}{mc}{m}{sc}{<->ssub*mc/m/n}{}
+%% n
+\DeclareFontShape{JY1}{gt}{b}{n}{<->ssub*gt/m/n}{}
+\DeclareFontShape{JT1}{gt}{b}{n}{<->ssub*gt/m/n}{}
+
+\renewenvironment{thebibliography}[1]
+{\section*{\refname\@mkboth{\refname}{\refname}}%
+  \list{\@biblabel{\@arabic\c@enumiv}}%
+       {\settowidth\labelwidth{\@biblabel{#1}}%
+        \leftmargin\labelwidth
+        \advance\leftmargin\labelsep
+ \setlength\itemindent{-3pt}
+ \setlength\itemsep{0zh}%←ここの数値を調整(行間のつまり具合)
+ \setlength\baselineskip{9pt}%←ここの数値を調整（追加）(文字の大きさ)
+        \@openbib@code
+        \usecounter{enumiv}%
+        \let\p@enumiv\@empty
+        \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+  \sloppy
+  \clubpenalty4000
+  \@clubpenalty\clubpenalty
+  \widowpenalty4000%
+  \sfcode`\.\@m}
+ {\def\@noitemerr
+   {\@latex@warning{Empty `thebibliography' environment}}%
+  \endlist}
+  
+\makeatletter
+\def\mojiparline#1{
+    \newcounter{mpl}
+    \setcounter{mpl}{#1}
+    \@tempdima=\linewidth
+    \advance\@tempdima by-\value{mpl}zw
+    \addtocounter{mpl}{-1}
+    \divide\@tempdima by \value{mpl}
+    \advance\kanjiskip by\@tempdima
+    \advance\parindent by\@tempdima
+}
+\makeatother
+\def\linesparpage#1{
+    \baselineskip=\textheight
+    \divide\baselineskip by #1
+}
